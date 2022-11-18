@@ -9,9 +9,26 @@ public class APCalendar {
      * isLeapYear(2016) returns True
      */          
     public static boolean isLeapYear(int year) {
-        // implementation not shown
+        // check first if the number is divisible by 4 since leap yeas occur every 4 years. if it is not divisible by 4 then we know it isn't a leap year
+        if (year%4 == 0) {
+            // then check if the number is also divisible by 100 which would include numbers like 2000, 1900, etc some of which are and are not leap years
+            if (year%100 == 0) {
+                // to make sure the right centural years are counted we must only include the numbers that are divisible by 400, otherwise it is not a leap year
+                if (year%400 == 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return false;   
+        }
 
-        return false;
         }
         
     /** Returns the value representing the day of the week 
@@ -22,7 +39,8 @@ public class APCalendar {
     */
     private static int firstDayOfYear(int year) {
         // implementation not shown
-
+        int temp = 2022 - year;
+        if ()
         return 0;
         }
 
