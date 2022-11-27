@@ -37,7 +37,7 @@ public class APCalendar {
      * 6 denotes Saturday. 
      * firstDayOfYear(2019) returns 2 for Tuesday.
     */
-    private static int firstDayOfYear(int year) {
+    public static int firstDayOfYear(int year) {
     // initializing variables used throughout the program
     int nonleap, totaldays, day;
     // initializing variable B which is 1900 because it is a year thats first day is a Monday
