@@ -94,7 +94,7 @@ public class APCalendar {
      * dayOfYear(3, 1, 2017) returns 60, since 2017 is not a leap year
      * dayOfYear(3, 1, 2016) returns 61, since 2016 is a leap year. 
     */ 
-    private static int dayOfYear(int month, int day, int year) {
+    public static int dayOfYear(int month, int day, int year) {
         // initializing the day of the year variable
         int dayOY = 0;
         // if the month is before august then odds are 31 days and evens are 30 days which are accounted for and added to the total count
