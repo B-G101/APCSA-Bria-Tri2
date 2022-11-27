@@ -38,8 +38,53 @@ public class APCalendar {
      * firstDayOfYear(2019) returns 2 for Tuesday.
     */
     private static int firstDayOfYear(int year) {
-        // implementation not shown
-        return 0;
+    // initializing variables used throughout the program
+    int nonleap, totaldays, day;
+    // initializing variable B which is 1900 because it is a year thats first day is a Monday
+    int B = 1900;
+ 
+    // counts the total number of years between the initial year and the final year aka year-1900
+    // for example: 2000 and 1900 would have 99 years between them which would be set as the new variable
+    year = (year - 1) - B;
+
+    // counting the number of leap years that are between B=1900 and year and storing them as variable lyear
+    // incriments the value by 1
+    int lyear = numberOfLeapYears(B, (B + year));
+ 
+    nonleap = year - lyear;
+ 
+    // using the values of leap years and nonleap years to calculate the total number of days in between year and B = 1900
+    // since we subtracted one year previously we must add one day back so that it ends on january 1st of the next year
+    // ex: jan 1. 1900 + 99 years = dec 31 1999 meaning that we have to add 1 day to get to jan 1. 2000
+    totaldays = (nonleap * 365) + (lyear * 366) + 1;
+ 
+    // finding the actual day that it lands on
+    day = (totaldays % 7);
+ 
+    if (day == 0)
+      return 1;
+ 
+    else if (day == 1)
+      return 2;
+ 
+    else if (day == 2)
+      return 3;
+ 
+    else if (day == 3)
+      return 4;
+ 
+    else if (day == 4)
+      return 5;
+ 
+    else if (day == 5)
+      return 6;
+ 
+    else if (day == 6)
+      return 0;
+ 
+    // if the number is not typed corrected this error message will appear  
+    else
+      return 0;
         }
 
 
@@ -50,10 +95,57 @@ public class APCalendar {
      * dayOfYear(3, 1, 2016) returns 61, since 2016 is a leap year. 
     */ 
     private static int dayOfYear(int month, int day, int year) {
-        // implementation not shown
+        // initializing the day of the year variable
+        int dayOY = 0;
+        // if the month is before august then odds are 31 days and evens are 30 days which are accounted for and added to the total count
+        if (month < 8){
+            for (int i = 1; i <= month-1; i++){
+                if (i % 2 == 0){
+                    dayOY = (dayOY + 30);
+                }
+                else {
+                    dayOY = (dayOY + 31);
+                }
+            }
 
-        return 1;
         }
+        
+        // if the month is after august or is august then odds are 30 days and evens are 31 days which are added to the total
+        else {
+            for (int i = 1; i < 8; i++){
+                if (i % 2 == 0){
+                    dayOY = (dayOY + 30);
+                }
+                else {
+                    dayOY = (dayOY + 31);
+                }
+            }
+                   
+            for (int i = 0; i < month-8; i++){
+                if (i % 2 == 0){
+                    dayOY = (dayOY + 31);
+                }
+                else{
+                    dayOY = (dayOY + 30);
+                }
+            }
+        }
+        // since feb is not accounted for in the code we must subtract 30 and add the correct number of days for the month of feb depending on whether or not it is a leap year
+        if (month >= 2){
+            if (isLeapYear(year)) {
+                dayOY = dayOY - 30;
+                dayOY = (dayOY + 29);
+            }
+            else {
+                dayOY = dayOY - 30;
+                dayOY = (dayOY + 28);
+            }
+        }
+
+        dayOY = dayOY + day;
+        return dayOY;
+    }
+        
 
     /** Returns the number of leap years between year1 and year2, inclusive.
      * Precondition: 0 <= year1 <= year2
