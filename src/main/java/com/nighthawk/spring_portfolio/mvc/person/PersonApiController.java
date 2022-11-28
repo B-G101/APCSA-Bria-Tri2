@@ -61,11 +61,14 @@ public class PersonApiController {
     /*
     POST Aa record by Requesting Parameters from URI
      */
-    @PostMapping( "/post")
+    @PostMapping("/post")
     public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
                                              @RequestParam("password") String password,
                                              @RequestParam("name") String name,
-                                             @RequestParam("dob") String dobString) {
+                                             @RequestParam("dob") String dobString,
+                                             @RequestParam("height") int height,
+                                             @RequestParam("weight") int weight,
+                                             @RequestParam("gender") String gender) {
         Date dob;
         try {
             dob = new SimpleDateFormat("MM-dd-yyyy").parse(dobString);
@@ -73,12 +76,12 @@ public class PersonApiController {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
         // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob);
+        Person person = new Person(email, password, name, dob, height, weight, gender);
         repository.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
 
-    /*
+  /*
     The personSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
      */
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -124,6 +127,19 @@ public class PersonApiController {
         // return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
         
+    }
+
+
+    @GetMapping("/toString/{id}")
+    public String toStringPerson(@PathVariable long id) {
+        Optional<Person> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            Person person = optional.get();
+            String toStringResult = person.toString();
+            return toStringResult;
+        }
+        // return Bad ID
+        return "No Such Person Exists";
     }
 
 }

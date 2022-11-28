@@ -73,16 +73,16 @@ class Year {
    }
 
 
-   public int dayOfYear(int month, int day, int year) {
+   public int getdayOfYear(int month, int day, int year) {
       return APCalendar.dayOfYear(month, day, year);
    }
 
    private void setdayOfYear(int month, int day, int year) {
-      this.firstDayOfYear = APCalendar.dayOfYear(month, day, year);
+      this.dayOfYear = APCalendar.dayOfYear(month, day, year);
    }
 
-   public String dayOfYearToString() {
-      return ( "{ \"year\": "  +this.year+  ", " + "\"dayOfYear\": "  +this.dayOfYear+ " }" );
+   public String dayOfYearToString(){
+      return ( "{ \"Date\": "  + "\"" + this.month + "-" + this.day +"-" +  this.year + "\"" +  ", " + "\"dayOfYear\": "  + this.dayOfYear + " }" );
    }
 
 
@@ -125,7 +125,7 @@ class Year {
    public static void main(String[] args) {
       Year year = new Year();
       year.setYear(2022);
-      year.setDate(1,1,2022);
+      year.setDate(9,1,2022);
       year.setYears(1900, 2022);
       System.out.println(year);
    }

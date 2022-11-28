@@ -38,9 +38,9 @@ The last annotation connect to database
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@TypeDef(name="json", typeClass = JsonType.class)
+@TypeDef(name = "json", typeClass = JsonType.class)
 public class Person {
-    
+
     // automatic unique identifier for Person record
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,50 +48,98 @@ public class Person {
 
     // email, password, roles are key attributes to login and authentication
     @NotEmpty
-    @Size(min=5)
-    @Column(unique=true)
+    @Size(min = 5)
+    @Column(unique = true)
     @Email
     private String email;
 
     @NotEmpty
     private String password;
 
-    // @NonNull, etc placed in params of constructor: "@NonNull @Size(min = 2, max = 30, message = "Name (2 to 30 chars)") String name"
+    // @NonNull, etc placed in params of constructor: "@NonNull @Size(min = 2, max =
+    // 30, message = "Name (2 to 30 chars)") String name"
     @NonNull
     @Size(min = 2, max = 30, message = "Name (2 to 30 chars)")
     private String name;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
-    
 
-    /* HashMap is used to store JSON for daily "stats"
-    "stats": {
-        "2022-11-13": {
-            "calories": 2200,
-            "steps": 8000
-        }
-    }
-    */
-    @Type(type="json")
+    private int height;
+
+    private int weight;
+
+    @NotEmpty
+    private String gender;
+
+    /*
+     * HashMap is used to store JSON for daily "stats"
+     * "stats": {
+     * "2022-11-13": {
+     * "calories": 2200,
+     * "steps": 8000
+     * }
+     * }
+     */
+    @Type(type = "json")
     @Column(columnDefinition = "jsonb")
-    private Map<String,Map<String, Object>> stats = new HashMap<>(); 
-    
+    private Map<String, Map<String, Object>> stats = new HashMap<>();
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob) {
+    public Person(String email, String password, String name, Date dob, int height, int weight, String gender) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.dob = dob;
+        this.height = height;
+        this.weight = weight;
+        this.gender = gender;
     }
 
     // A custom getter to return age from dob attribute
     public int getAge() {
         if (this.dob != null) {
             LocalDate birthDay = this.dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            return Period.between(birthDay, LocalDate.now()).getYears(); }
+            return Period.between(birthDay, LocalDate.now()).getYears();
+        }
         return -1;
+    }
+
+    public boolean isAdult() {
+        if (this.getAge() >= 18) {
+            return true;
+        }
+        return false;
+    }
+
+    public double getBMI(int height, int weight) {
+        double BMI = (703 * weight) / (height * height);
+        return BMI;
+    }
+
+    public int getCalorie(String gender, int weight, int height) {
+        return 1;
+    }
+
+    public String toString() {
+        return ("{ \"name\": " + this.name + ", " + "\"email\": " + this.email + ", " + "\"password\": " + this.password
+                + ", " + "\"age\": " + this.getAge() + ", " + "\"adult\": " + this.isAdult() + ", " + "\"height\": "
+                + this.height + ", " + "\"weight\": " + this.weight + "\"gender\": " + this.gender + ", " + "\"BMI\": "
+                + this.getBMI(height, weight) + " }");
+    }
+
+    public static void main(String[] args) {
+
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        LocalDate birthday = LocalDate.of(2004, 9, 27);
+        Date birth = Date.from(birthday.atStartOfDay(defaultZoneId).toInstant());
+
+        Person bria = new Person("briag@gmail.com", "1234", "Bria Gilliam", birth, 67, 110, "female");
+        System.out.println(bria.getAge());
+        System.out.println(bria.isAdult());
+        System.out.println(bria.getBMI(67, 110));
+
+        System.out.println(bria);
     }
 
 }
